@@ -19,8 +19,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         
         self.window = UIWindow(windowScene: scene)
-        window?.rootViewController = ViewController()
+        window?.rootViewController = CollectionModuleBuilder.build()
         window?.makeKeyAndVisible()
+        
+        DefaultNetworkService().fetchEntities(completion: { result in
+            switch result {
+            case .success(let entities):
+                print(entities.compactMap{ $0.todo }.joined(separator: "\n"))
+            case .failure(let error):
+                print(String(describing: error))
+            }
+        })
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

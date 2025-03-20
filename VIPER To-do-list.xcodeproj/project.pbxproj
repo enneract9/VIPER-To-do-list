@@ -14,7 +14,7 @@
 		CEA1CE6A2D8B5201004774A2 /* Exceptions for "VIPER To-do-list" folder in "VIPER To-do-list" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Supplementary/Info.plist,
+				Resources/Info.plist,
 			);
 			target = CEA1CE542D8B51FE004774A2 /* VIPER To-do-list */;
 		};
@@ -147,7 +147,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7367KC6PKX;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "VIPER To-do-list/Supplementary/Info.plist";
+				INFOPLIST_FILE = "VIPER To-do-list/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "To do list";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -180,7 +180,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7367KC6PKX;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "VIPER To-do-list/Supplementary/Info.plist";
+				INFOPLIST_FILE = "VIPER To-do-list/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "To do list";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
