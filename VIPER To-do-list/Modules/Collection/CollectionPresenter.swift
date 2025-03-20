@@ -8,8 +8,8 @@
 import Foundation
 
 protocol CollectionPresenter: AnyObject {
-    func viewDidLoaded()
-    func entitiesDidFetched(entities: [TodoEntity])
+    func viewDidLoad()
+    func interactorDidFetch(entities: [TodoEntity])
 }
 
 final class CollectionPresenterImpl {
@@ -25,11 +25,20 @@ final class CollectionPresenterImpl {
 }
 
 extension CollectionPresenterImpl: CollectionPresenter {
-    func viewDidLoaded() {
-        
+    func viewDidLoad() {
+        // начало загрузки данных
+        interactor.fetchEntities()
     }
     
-    func entitiesDidFetched(entities: [TodoEntity]) {
-        
+    func interactorDidFetch(entities: [TodoEntity]) {
+        let presentables = entities.map {
+            CollectionViewPresentable(
+                title: $0.todo,
+                description: $0.description,
+                checkmarked: $0.completed,
+                date: $0.date
+            )
+        }
+        view?.update(with: presentables)
     }
 }
