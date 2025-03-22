@@ -1,5 +1,5 @@
 //
-//  CollectionModuleBuilder.swift
+//  ListModuleBuilder.swift
 //  VIPER To-do-list
 //
 //  Created by @_@ on 20.03.2025.
@@ -7,12 +7,12 @@
 
 import UIKit
 
-final class CollectionModuleBuilder {
+final class ListModuleBuilder {
     static func build() -> UIViewController {
-        let router = CollectionRouterImpl()
-        let interactor = CollectionInteractorImpl()
-        let view = CollectionViewImpl()
-        let presenter = CollectionPresenterImpl(router: router, interactor: interactor)
+        let router = ListRouterImpl()
+        let interactor = ListInteractorImpl()
+        let view = ListViewImpl()
+        let presenter = ListPresenterImpl(router: router, interactor: interactor)
         
         router.presenter = presenter
         interactor.presenter = presenter

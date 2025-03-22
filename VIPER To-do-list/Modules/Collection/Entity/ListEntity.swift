@@ -1,5 +1,5 @@
 //
-//  TodoEntity.swift
+//  ListEntity.swift
 //  VIPER To-do-list
 //
 //  Created by @_@ on 20.03.2025.
@@ -7,19 +7,25 @@
 
 import Foundation
 
-struct TodoEntity: Codable {
+struct ListEntity: Codable {
     let id: String
     var todo: String
     var description: String?
     var completed: Bool
     let date: Date
     
-    init(todo: String, description: String? = nil, completed: Bool) {
-        self.id = UUID().uuidString
+    init(
+        id: String = UUID().uuidString,
+        todo: String,
+        description: String? = nil,
+        completed: Bool,
+        date: Date = Date()
+    ) {
+        self.id = id
         self.todo = todo
         self.description = description
         self.completed = completed
-        self.date = Date()
+        self.date = date
     }
     
     init(from decoder: any Decoder) throws {
@@ -32,19 +38,19 @@ struct TodoEntity: Codable {
     }
 }
 
-extension TodoEntity {
-    static let mockEntities: [TodoEntity] = [
-        TodoEntity(
-            todo: "Do something nice for someone you care about",
-            description: "Do something nice for someone you care about",
+extension ListEntity {
+    static let mockEntities: [ListEntity] = [
+        ListEntity(
+            todo: "Do something nice for someone you care about Do something nice for someone you care about Do something nice for someone you care about",
+            description: "Do something nice for someone you care about Do something nice for someone you care about Do something nice for someone you care about",
             completed: false
         ),
-        TodoEntity(
+        ListEntity(
             todo: "Contribute code or a monetary donation to an open-source software project",
             description: nil,
             completed: true
         ),
-        TodoEntity(
+        ListEntity(
             todo: "Watch a documentary",
             description: "Write a thank you letter to an influential person in your life",
             completed: true
@@ -53,5 +59,5 @@ extension TodoEntity {
 }
 
 struct TodoArray: Codable {
-    let todos: [TodoEntity]
+    let todos: [ListEntity]
 }

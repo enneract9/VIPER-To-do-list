@@ -8,7 +8,7 @@
 import Foundation
 
 protocol NetworkService {
-    typealias Completion = (Result<[TodoEntity], Error>) -> Void
+    typealias Completion = (Result<[ListEntity], Error>) -> Void
     
     func fetchEntities(completion: @escaping Completion)
 }
@@ -63,7 +63,7 @@ extension NetworkService where Self == MockNetworkService {
 final class MockNetworkService: NetworkService {
     func fetchEntities(completion: @escaping Completion) {
         completion(
-            .success(TodoEntity.mockEntities)
+            .success(ListEntity.mockEntities)
         )
     }
 }
