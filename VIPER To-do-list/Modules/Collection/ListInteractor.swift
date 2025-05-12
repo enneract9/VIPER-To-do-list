@@ -10,6 +10,7 @@ import Foundation
 protocol ListInteractor: AnyObject {
     func loadEntities()
     func loadEntities(filter: String?)
+    func removeEntity(id: String)
     func updateEntity(id: String, completed: Bool)
 }
 
@@ -75,6 +76,11 @@ final class ListInteractorImpl: ListInteractor {
                 self?.handle(error: error)
             }
         })
+    }
+    
+    func removeEntity(id: String) {
+        coreDataService.removeEntity(id: id)
+        loadEntities()
     }
     
     func updateEntity(id: String, completed: Bool) {

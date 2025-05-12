@@ -8,10 +8,11 @@
 import Foundation
 
 protocol ListPresenter: AnyObject {
-    func viewDidLoad()
+    func viewWillAppear()
     func viewDidSearch(text: String?)
-    func viewDidRequestEditor(with presentable: ListViewPresentable?)
-    func checkboxValueDidChange(with id: String, newValue: Bool)
+    func viewDidRemovePresentable(id: String)
+    func viewDidRequestEditor(entityId: String?)
+    func checkboxValueDidChange(entityId: String, newValue: Bool)
     func interactorDidUpdate(entities: [ListEntity])
 }
 
@@ -19,18 +20,21 @@ final class ListPresenterImpl {
     weak var view: ListView?
     private var router: ListRouter
     private var interactor: ListInteractor
+    private let dateFormater: DateFormatter
     
     init(view: ListView? = nil, router: ListRouter, interactor: ListInteractor) {
         self.view = view
         self.router = router
         self.interactor = interactor
+        self.dateFormater = DateFormatter()
+        dateFormater.dateFormat = "MM/dd/yy"
     }
 }
 
 extension ListPresenterImpl: ListPresenter {
     
     // MARK: View -> Presenter
-    func viewDidLoad() {
+    func viewWillAppear() {
         interactor.loadEntities()
     }
     
@@ -38,29 +42,37 @@ extension ListPresenterImpl: ListPresenter {
         interactor.loadEntities(filter: text)
     }
     
-    func viewDidRequestEditor(with presentable: ListViewPresentable?) {
-        // вызвать роутер
+    func viewDidRemovePresentable(id: String) {
+        interactor.removeEntity(id: id)
     }
     
-    func checkboxValueDidChange(with id: String, newValue: Bool) {
-        interactor.updateEntity(id: id, completed: newValue)
+    func viewDidRequestEditor(entityId: String?) {
+        router.showEditor(entityId: entityId)
+    }
+    
+    func checkboxValueDidChange(entityId: String, newValue: Bool) {
+        interactor.updateEntity(id: entityId, completed: newValue)
     }
     
     // MARK: Interactor -> Presenter
     func interactorDidUpdate(entities: [ListEntity]) {
-        let presentables = entities.map {
-            ListViewPresentable(
-                id: $0.id,
-                title: $0.todo,
-                description: $0.description,
-                checkmarked: $0.completed,
-                date: $0.date.formatted(date: .numeric, time: .omitted)
-            )
-        }
+        let presentables = entities
+            .sorted(by: { $0.date > $1.date })
+            .map {
+                ListViewPresentable(
+                    id: $0.id,
+                    title: $0.todo,
+                    description: $0.description,
+                    checkmarked: $0.completed,
+                    date: dateFormater.string(from: $0.date)
+                )
+            }
         let title = String(localized: "\(presentables.count) Tasks")
         
+        let animatingDifferences = presentables.count != view?.presentablesCount
+        
         DispatchQueue.main.async { [weak self] in
-            self?.view?.update(with: presentables)
+            self?.view?.update(with: presentables, animatingDifferences: animatingDifferences)
             self?.view?.setToolbarTitle(title)
         }
     }

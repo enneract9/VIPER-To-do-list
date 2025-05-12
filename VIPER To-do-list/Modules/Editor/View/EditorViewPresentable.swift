@@ -9,7 +9,7 @@ import Foundation
 
 struct EditorViewPresentable: Hashable {
     let id: String
-    let title: String
+    let title: String?
     let description: String?
     let date: String
 }

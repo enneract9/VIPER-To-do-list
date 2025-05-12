@@ -7,12 +7,12 @@
 
 import UIKit
 
-final class ListViewCellConfiguration: UIContentConfiguration {
+final class ListCellConfiguration: UIContentConfiguration {
     
     let presentable: ListViewPresentable
     let checkboxValueChanged: (Bool) -> ()
     
-    static let reuseId: String = "ListViewCell"
+    static let reuseId: String = "ListCell"
     
     init(presentable: ListViewPresentable, checkboxDidToggle: @escaping (Bool) -> ()) {
         self.presentable = presentable
@@ -20,7 +20,7 @@ final class ListViewCellConfiguration: UIContentConfiguration {
     }
     
     func makeContentView() -> any UIView & UIContentView {
-        ListViewCellContentView(configuration: self)
+        ListCellContentView(configuration: self)
     }
     
     func updated(for state: any UIConfigurationState) -> Self {
@@ -28,7 +28,7 @@ final class ListViewCellConfiguration: UIContentConfiguration {
     }
 }
 
-final class ListViewCellContentView: UIStackView, UIContentView {
+final class ListCellContentView: UIStackView, UIContentView {
     var configuration: UIContentConfiguration {
         didSet {
             applyConfiguration()
@@ -91,7 +91,7 @@ final class ListViewCellContentView: UIStackView, UIContentView {
         return stack
     }()
     
-    init(configuration: ListViewCellConfiguration) {
+    init(configuration: ListCellConfiguration) {
         self.configuration = configuration
         
         super.init(frame: .zero)
@@ -116,7 +116,7 @@ final class ListViewCellContentView: UIStackView, UIContentView {
     }
     
     private func applyConfiguration() {
-        guard let configuration = configuration as? ListViewCellConfiguration else {
+        guard let configuration = configuration as? ListCellConfiguration else {
             return
         }
         

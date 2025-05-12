@@ -33,7 +33,7 @@ extension ManagedListEntity {
         date = entity.date
     }
         
-    func mapToEntity() -> ListEntity {
+    func mapToListEntity() -> ListEntity {
         ListEntity(
             id: id,
             todo: todo,

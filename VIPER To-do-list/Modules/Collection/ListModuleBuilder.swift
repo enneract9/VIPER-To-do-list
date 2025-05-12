@@ -14,7 +14,7 @@ final class ListModuleBuilder {
         let view = ListViewImpl()
         let presenter = ListPresenterImpl(router: router, interactor: interactor)
         
-        router.presenter = presenter
+        router.viewController = view
         interactor.presenter = presenter
         presenter.view = view
         view.presenter = presenter

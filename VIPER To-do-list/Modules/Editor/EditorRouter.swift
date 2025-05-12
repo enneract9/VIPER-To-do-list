@@ -5,4 +5,12 @@
 //  Created by @_@ on 23.03.2025.
 //
 
-import Foundation
+import UIKit
+
+protocol EditorRouter: AnyObject { }
+
+final class EditorRouterImpl {
+    weak var viewController: UIViewController?
+}
+
+extension EditorRouterImpl: EditorRouter { }

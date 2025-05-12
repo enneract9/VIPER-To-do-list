@@ -7,16 +7,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C737C48A-15CF-45BA-8B4F-9E250CCF5759"
+            uuid = "50077402-A26B-4449-BDB5-33C63DC08C70"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "VIPER To-do-list/Modules/Collection/View/ListViewCellConfiguration.swift"
+            filePath = "VIPER To-do-list/Modules/Collection/View/ListView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
-            landmarkName = "applyConfiguration()"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
+            landmarkName = "update(with:animatingDifferences:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EA69824C-5243-4649-A9BB-ADCDB68EC3ED"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VIPER To-do-list/Service/CoreDataService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
+            landmarkName = "saveEntities(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

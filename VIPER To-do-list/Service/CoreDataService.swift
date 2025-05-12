@@ -9,13 +9,14 @@ import UIKit
 import CoreData
 
 protocol CoreDataService {
-    typealias Completion = (Result<[ListEntity], Error>) -> Void
+    typealias ArrayCompletion = (Result<[ListEntity], Error>) -> Void
+    typealias Completion = (Result<ListEntity?, Error>) -> Void
     
-    func fetchEntities(completion: @escaping Completion)
+    func fetchEntities(completion: @escaping ArrayCompletion)
+    func fetchEntity(id: String, completion: Completion)
     func updateEntity(id: String, completed: Bool)
     func saveEntities(_ entities: [ListEntity])
-    func saveEntity(_ entity: ListEntity)
-    func removeEntity(with id: String)
+    func removeEntity(id: String)
 }
 
 // MARK: - Default
@@ -33,13 +34,34 @@ final class DefaultCoreDataService: CoreDataService {
         appDelegate?.persistentContainer.viewContext
     }
     
-    func fetchEntities(completion: @escaping Completion) {
+    func fetchEntities(completion: @escaping ArrayCompletion) {
+        guard let context = context else {
+            completion(.failure(DefaultCoreDataServiceError.noContext))
+            return
+        }
+        
         do {
-            guard let managedEntities = try context?.fetch(ManagedListEntity.fetchRequest()) else {
-                throw DefaultCoreDataServiceError.fetchFailed
-            }
-            let entities = managedEntities.map { $0.mapToEntity() }
+            let managedEntities = try context.fetch(ManagedListEntity.fetchRequest())
+            let entities = managedEntities.map { $0.mapToListEntity() }
             completion(.success(entities))
+        } catch {
+            completion(.failure(error))
+        }
+    }
+    
+    func fetchEntity(id: String, completion: Completion) {
+        guard let context = context else {
+            completion(.failure(DefaultCoreDataServiceError.noContext))
+            return
+        }
+        
+        do {
+            let request = ManagedListEntity.fetchRequest()
+            request.predicate = NSPredicate(format: "id == %@", id)
+            
+            let managedEntity = try context.fetch(request).first
+            let entity = managedEntity?.mapToListEntity()
+            completion(.success(entity))
         } catch {
             completion(.failure(error))
         }
@@ -76,22 +98,7 @@ final class DefaultCoreDataService: CoreDataService {
         appDelegate?.saveContext()
     }
     
-    func saveEntity(_ entity: ListEntity) {
-        removeEntity(with: entity.id)
-        
-        guard let context = context,
-              let description = NSEntityDescription.entity(forEntityName: ManagedListEntity.entityName, in: context)
-        else {
-            return
-        }
-        
-        let managedEntity = ManagedListEntity(entity: description, insertInto: context)
-        managedEntity.update(with: entity)
-        
-        appDelegate?.saveContext()
-    }
-    
-    func removeEntity(with id: String) {
+    func removeEntity(id: String) {
         let request = ManagedListEntity.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", id)
         
@@ -104,7 +111,7 @@ final class DefaultCoreDataService: CoreDataService {
 
 extension DefaultCoreDataService {
     enum DefaultCoreDataServiceError: Error {
-        case fetchFailed
+        case noContext
     }
 }
 
@@ -117,9 +124,15 @@ extension CoreDataService where Self == MockCoreDataService {
 final class MockCoreDataService: CoreDataService {
     private var entities = ListEntity.mockEntities
     
-    func fetchEntities(completion: @escaping Completion) {
+    func fetchEntities(completion: @escaping ArrayCompletion) {
         completion(
             .success(entities)
+        )
+    }
+    
+    func fetchEntity(id: String, completion: Completion) {
+        completion(
+            .success(entities.first(where: { $0.id == id }))
         )
     }
     
@@ -133,18 +146,11 @@ final class MockCoreDataService: CoreDataService {
     }
     
     func saveEntities(_ entities: [ListEntity]) {
-        entities.forEach { removeEntity(with: $0.id) }
+        entities.forEach { removeEntity(id: $0.id) }
         self.entities.append(contentsOf: entities)
     }
     
-    func saveEntity(_ entity: ListEntity) {
-        if let index = entities.firstIndex(where: { $0.id == entity.id }) {
-            entities.remove(at: index)
-        }
-        entities.append(entity)
-    }
-    
-    func removeEntity(with id: String) {
+    func removeEntity(id: String) {
         if let index = entities.firstIndex(where: { $0.id == id }) {
             entities.remove(at: index)
         }
